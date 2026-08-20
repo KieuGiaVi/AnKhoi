@@ -35,16 +35,20 @@ backend/
     <tên module>/            # test mirror đúng cấu trúc modules/
 ```
 
-### Quy tắc bên trong 1 module (bắt buộc, đặt tên nhất quán)
+### Quy tắc bên trong 1 module (bắt buộc, đặt tên nhất quán — TypeScript)
 ```
 modules/<ten-module>/
-  <ten-module>.model.js       # Mongoose schema — đúng field đã khai báo ở database.md
-  <ten-module>.service.js     # logic nghiệp vụ thuần, KHÔNG import Express req/res
-  <ten-module>.controller.js  # nhận req/res, gọi service, KHÔNG chứa business logic
-  <ten-module>.routes.js      # khai báo endpoint, gắn middleware
-  <ten-module>.validation.js  # schema validate input (Joi/Zod/express-validator)
-  index.js                    # export routes + (nếu cần) service cho module khác import
+  <ten-module>.types.ts       # interface/type riêng của module (DTO, input/output)
+  <ten-module>.model.ts       # Mongoose schema + interface I<Ten> — đúng field ở database.md
+  <ten-module>.service.ts     # logic nghiệp vụ thuần, KHÔNG import Express Request/Response
+  <ten-module>.controller.ts  # nhận Request/Response, gọi service, KHÔNG chứa business logic
+  <ten-module>.routes.ts      # khai báo endpoint, gắn middleware, kiểu Router
+  <ten-module>.validation.ts  # schema validate input bằng Joi/Zod
+  index.ts                    # export router + (nếu cần) service cho module khác import
 ```
+Toàn bộ backend viết bằng TypeScript (`.ts`), không viết `.js` mới. Bật
+`strict: true` trong `tsconfig.json` — không dùng `any` tùy tiện, ưu tiên định
+nghĩa `interface`/`type` rõ ràng cho input/output của từng service.
 
 ### Nguyên tắc giao tiếp giữa các module
 - Module A muốn dùng logic của module B → import từ `modules/B/index.js`,
@@ -54,13 +58,14 @@ modules/<ten-module>/
 - `audit/` không bị module khác gọi trực tiếp để ghi log — dùng 1 hàm
   `logAudit()` export sẵn, gọi từ middleware chung hoặc từ service khi cần.
 
-## Frontend Web (React) — feature-based
+## Frontend Web (React + TypeScript) — feature-based
 
 ```
 web_dashboard/
   src/
     app/                # routing, layout tổng, providers
     shared/             # component dùng chung, hooks, api client (axios instance)
+      types/             # type dùng chung nhiều feature (User, ApiResponse<T>...)
     features/
       auth/
       reception/        # Lễ tân: check-in, walk-in, thu ngân
@@ -69,9 +74,11 @@ web_dashboard/
       pharmacy/          # Dược sĩ: cấp phát
       admin/             # Quản trị: danh mục, báo cáo, audit log
 ```
-Mỗi thư mục trong `features/` tự chứa `components/`, `hooks/`, `api.js`,
-`pages/` riêng — không dùng chung state ngoài phạm vi feature trừ khi qua
-`shared/`.
+Mỗi thư mục trong `features/` tự chứa `components/` (`.tsx`), `hooks/` (`.ts`),
+`api.ts`, `types.ts`, `pages/` (`.tsx`) riêng — không dùng chung state ngoài
+phạm vi feature trừ khi qua `shared/`. Component có JSX → đuôi `.tsx`; file
+logic thuần (hook, helper, gọi API) không có JSX → đuôi `.ts`. Bật
+`strict: true` trong `tsconfig.json`, giống backend.
 
 ## Mobile App (Flutter) — feature-based
 

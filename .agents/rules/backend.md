@@ -1,17 +1,35 @@
-# Rule: Backend (Node.js / Express / MongoDB)
+# Rule: Backend (Node.js / Express / MongoDB / TypeScript)
+
+## Ngôn ngữ & tooling
+- Toàn bộ backend viết bằng TypeScript (`.ts`), `tsconfig.json` bật
+  `strict: true`, `noImplicitAny: true`.
+- Chạy dev bằng gói `tsx` (`tsx watch src/server.ts`) — không dùng `ts-node`
+  hay Babel để tránh chồng chéo công cụ.
+- Build production bằng `tsc` biên dịch ra `dist/`, chạy bằng `node dist/server.js`.
+- Cài kèm type definition cho mọi package thiếu type sẵn:
+  `@types/node`, `@types/express`, `@types/cors`, `@types/bcrypt`,
+  `@types/jsonwebtoken`.
+- Không dùng `any` để né lỗi type — nếu chưa biết kiểu chính xác, định nghĩa
+  `interface`/`type` tạm và ghi TODO, không dùng `any` như giải pháp cuối.
 
 ## Chuẩn code
 - Dùng async/await, không dùng callback lồng nhau. Mọi controller bọc bằng
-  1 hàm `catchAsync` chung trong `common/utils` — không try/catch lặp lại
-  ở từng controller.
-- Response trả về theo 1 format thống nhất toàn hệ thống:
-  `{ success: boolean, data, message, errorCode? }`. Định nghĩa 1 lần trong
-  `common/utils/response.js`, mọi module dùng lại, không tự chế format riêng.
-- Validate input ở tầng route (middleware validation) trước khi vào
-  controller — controller không tự validate lại.
-- Không viết business logic trong file `*.routes.js` hoặc `*.controller.js`.
+  1 hàm `catchAsync` chung trong `common/utils` (nhận
+  `(req: Request, res: Response, next: NextFunction) => Promise<void>`) —
+  không try/catch lặp lại ở từng controller.
+- Response trả về theo 1 format thống nhất toàn hệ thống, định nghĩa bằng
+  generic type: `ApiResponse<T> = { success: boolean; data?: T; message: string; errorCode?: string }`.
+  Định nghĩa 1 lần trong `common/utils/response.ts` + `common/types/`, mọi
+  module dùng lại, không tự chế format riêng.
+- Validate input ở tầng route (middleware validation, dùng Joi hoặc Zod) trước
+  khi vào controller — controller không tự validate lại. Nếu dùng Zod, tận
+  dụng `z.infer<typeof schema>` để suy ra type input tự động thay vì viết tay.
+- Không viết business logic trong file `*.routes.ts` hoặc `*.controller.ts`.
   Toàn bộ logic (tính giá, kiểm tra dị ứng, bóc tách hóa đơn...) nằm trong
-  `*.service.js` để có thể unit test độc lập không cần khởi động Express.
+  `*.service.ts` để có thể unit test độc lập không cần khởi động Express.
+- Mỗi Mongoose model đi kèm 1 interface mô tả document, ví dụ
+  `interface IUser extends Document { hoTen: string; role: Role; ... }`,
+  và `Schema<IUser>` dùng interface đó — không khai báo Schema không kiểu.
 
 ## Authentication & Authorization
 - JWT access token, thời hạn ngắn (theo NFR 5.2). Middleware `auth.middleware`

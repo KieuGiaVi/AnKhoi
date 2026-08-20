@@ -1,14 +1,20 @@
 # Rule: Frontend (React Web Dashboard & Flutter Mobile App)
 
-## React Web Dashboard
-- Mỗi feature trong `features/<ten>/` tự chứa `api.js` (gọi API riêng của
-  feature đó qua client dùng chung ở `shared/api/client.js`), `pages/`,
-  `components/`, `hooks/`.
+## React Web Dashboard (TypeScript)
+- Dự án khởi tạo bằng Vite template `react-ts`. Component có JSX → `.tsx`;
+  hook/helper/gọi API không JSX → `.ts`.
+- Mỗi feature trong `features/<ten>/` tự chứa `api.ts` (gọi API riêng của
+  feature đó qua client dùng chung ở `shared/api/client.ts`), `types.ts`
+  (định nghĩa DTO/response type của feature), `pages/`, `components/`, `hooks/`.
 - State cục bộ trong feature dùng React state/hook thường; chỉ đưa lên state
   toàn cục (context/store) khi > 1 feature thực sự cần dùng chung (ví dụ
   thông tin `currentUser` sau đăng nhập).
-- Gọi API qua 1 instance axios duy nhất ở `shared/api/client.js` có sẵn
+- Gọi API qua 1 instance axios duy nhất ở `shared/api/client.ts` có sẵn
   interceptor gắn JWT — không tạo instance axios riêng trong từng feature.
+  Định nghĩa sẵn generic `ApiResponse<T>` trong `shared/types/` khớp với
+  format backend trả về (`{ success, data, message, errorCode? }`).
+- Props của mọi component định nghĩa bằng `interface <TenComponent>Props`,
+  không dùng `any` cho props hoặc kết quả gọi API.
 - Component UI Admin Panel tối ưu ngang (Tablet/PC) theo NFR 5.3 — vùng
   chạm nút thao tác tối thiểu 44×44px cho các trang dùng trên tablet
   (Bác sĩ, KTV, Dược sĩ, Lễ tân).
