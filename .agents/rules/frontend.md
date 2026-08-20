@@ -22,6 +22,20 @@
   dung feature trực tiếp trong router. Khi code feature thật, thay FeaturePlaceholder
   bằng component import từ features/<ten>/pages/, không sửa router thành nơi chứa UI.
 
+## TailAdmin Design Foundation (áp dụng từ module Lễ tân trở đi)
+- Web Dashboard dùng **TailAdmin React** (free, MIT License,
+  https://github.com/TailAdmin/free-react-tailwind-admin-dashboard) làm nền tảng UI
+  cho tất cả màn hình quản trị/danh mục/bảng dữ liệu/biểu đồ.
+- **Styling:** Tailwind CSS 4 (`@import "tailwindcss"` trong `src/index.css`).
+- **Layout shell:** `src/shared/layout/DashboardLayout.tsx` bọc Sidebar + Header + Outlet.
+  Route `/auth` KHÔNG dùng DashboardLayout — `LoginPage` render độc lập toàn màn hình.
+- **Sidebar:** `src/shared/layout/AppSidebar.tsx` — nav item lọc theo `role` người dùng.
+- **UI component dùng chung:** `src/shared/components/ui/index.tsx`
+  → `Button`, `Badge`, `Alert`, `Card`, `StatCard`, `Table<T>`, `Modal`.
+- **Biểu đồ:** `react-apexcharts` (đã cài). Wrap trong `Card` để đồng bộ style.
+- **Không copy thêm:** calendar, map, DnD, dropzone, swiper — ngoài phạm vi SRS.
+- **Attribution MIT:** Mọi file copy/adapt từ TailAdmin phải giữ comment nguồn đầu file.
+
 
 ## Flutter Mobile App
 - Mỗi feature trong `lib/features/<ten>/` tự chứa `presentation/` (screen +

@@ -5,4 +5,10 @@ module.exports = {
   testMatch: ['**/tests/**/*.test.ts'],
   moduleFileExtensions: ['ts', 'js', 'json'],
   clearMocks: true,
+  transform: {
+    '^.+\\.tsx?$': [
+      'ts-jest',
+      { tsconfig: './tsconfig.test.json' },
+    ],
+  },
 };

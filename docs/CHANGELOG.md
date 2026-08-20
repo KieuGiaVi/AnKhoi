@@ -2,6 +2,14 @@
 
 Tài liệu ghi chép toàn bộ các thay đổi hệ thống HCare+ theo từng task hoàn thành.
 
+## [2026-08-20] Web Dashboard — Tích hợp Nền tảng Thiết kế TailAdmin React (Dashboard Layout)
+- **Phạm vi:** `web_dashboard/`
+- **Yêu cầu:** Đưa TailAdmin React (bản miễn phí, mã nguồn mở MIT License) vào làm nền tảng thiết kế UI chung cho tất cả các màn hình quản trị của HCare+. Yêu cầu không phá vỡ logic tính năng Auth đã hoàn thiện và tích hợp có chọn lọc bằng cách copy các component thiết yếu vào thư mục `shared/`.
+- **File chính thay đổi:** `web_dashboard/package.json`, `web_dashboard/postcss.config.js`, `web_dashboard/src/index.css`, `web_dashboard/src/shared/layout/DashboardLayout.tsx`, `web_dashboard/src/shared/layout/AppSidebar.tsx`, `web_dashboard/src/shared/layout/AppHeader.tsx`, `web_dashboard/src/shared/layout/Backdrop.tsx`, `web_dashboard/src/shared/layout/SidebarContext.tsx`, `web_dashboard/src/shared/components/ui/index.tsx`, `web_dashboard/src/app/AppRouter.tsx`, `.agents/rules/frontend.md`.
+- **Kiểm thử:** `npm run build` (`vite build`) thành công 100%; `npm test` (`vitest run`) pass 2/2 test files (không hồi quy lỗi); Đã chụp ảnh xác nhận trang `LoginPage` độc lập và layout Dashboard (Sidebar + Header) hiển thị chính xác.
+- **Review phát hiện & đã sửa:** Xử lý dependency conflict khi setup apexcharts; sử dụng cú pháp import CSS thuần túy chuẩn Tailwind v4.
+- **Trạng thái:** ⏳ Chờ review (sẵn sàng commit/push)
+
 ## [2026-08-20] Web Dashboard — Triển khai Feature Auth & Route Guard (Glassmorphism UI, Context API, Vitest)
 - **Phạm vi:** `web_dashboard/`
 - **Yêu cầu:** Xây dựng màn hình đăng nhập `LoginPage` thật (thay thế FeaturePlaceholder ở `/auth`), bộ Tab chuyển đổi giữa Đăng nhập Bệnh nhân (OTP 2 bước) & Đăng nhập Nhân viên (Email/Mật khẩu), quản lý state qua `AuthContext` (React Context API), lưu JWT token ở `localStorage`, tự động gắn Authorization header qua Axios interceptor, và chặn route phân quyền bằng `ProtectedRoute`.
