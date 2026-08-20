@@ -2,6 +2,19 @@
 
 Tài liệu ghi chép toàn bộ các thay đổi hệ thống HCare+ theo từng task hoàn thành.
 
+## [2026-08-20] Backend — Triển khai Module Auth & Users (Đăng ký OTP, Staff Login, RBAC)
+- **Phạm vi:** `backend/`
+- **Yêu cầu:** Xây dựng module `auth` và `users` độc lập, xác thực OTP bệnh nhân, đăng nhập staff (bcrypt), phát hành JWT token (thời hạn 24h, fail-fast nếu thiếu JWT_SECRET), kiểm tra RBAC thực tế qua enum `Role`, tạo hồ sơ tạm Walk-in (`is_temp: true`) và quản lý `PatientProfile`.
+- **File chính thay đổi:** `backend/src/config/env.ts`, `backend/src/common/middlewares/auth.middleware.ts`, `backend/src/common/middlewares/rbac.middleware.ts`, `backend/src/modules/users/*`, `backend/src/modules/auth/*`, `backend/src/routes/index.ts`, `backend/tests/*`.
+- **Kiểm thử:** `npm run build` (`tsc`) 0 lỗi; `npm test` (Jest + Supertest) pass 5/5 test suites (25/25 tests pass 100%).
+- **Review phát hiện & đã sửa:**
+  1. Khóa an toàn OTP trong response API (chỉ trả về OTP khi `NODE_ENV !== 'production'`).
+  2. Bổ sung fail-fast throw error nếu thiếu `JWT_SECRET`.
+  3. Áp dụng chỉ mục `{ unique: true, sparse: true }` cho `sdt` và `email` trong `user.model.ts`.
+  4. Bổ sung unit test ở tầng service (`auth.service.test.ts`, `users.service.test.ts`), middleware (`auth.middleware.test.ts`, `rbac.middleware.test.ts`) và integration test Supertest cho chuỗi HTTP endpoints.
+
+- **Trạng thái:** ✅ Đã duyệt (sẵn sàng commit)
+
 ## [2026-08-20] Mobile App — Khởi tạo khung Flutter (Patient App)
 - **Phạm vi:** `mobile_app/`
 - **Yêu cầu:** Khởi tạo project Flutter (package `com.ankhoi.hcareplus`, name `hcare_plus`), cài đặt `dio`, `provider`, `flutter_dotenv`, cấu hình `DioClient` singleton, `AppTheme`, `.env.example`, `mobile_app/README.md` (hướng dẫn copy .env) và 6 feature subdirectories rỗng (chỉ chứa `README.md`).
