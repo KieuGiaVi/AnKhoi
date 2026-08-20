@@ -2,6 +2,17 @@
 
 Tài liệu ghi chép toàn bộ các thay đổi hệ thống HCare+ theo từng task hoàn thành.
 
+## [2026-08-20] Web Dashboard — Triển khai Feature Auth & Route Guard (Glassmorphism UI, Context API, Vitest)
+- **Phạm vi:** `web_dashboard/`
+- **Yêu cầu:** Xây dựng màn hình đăng nhập `LoginPage` thật (thay thế FeaturePlaceholder ở `/auth`), bộ Tab chuyển đổi giữa Đăng nhập Bệnh nhân (OTP 2 bước) & Đăng nhập Nhân viên (Email/Mật khẩu), quản lý state qua `AuthContext` (React Context API), lưu JWT token ở `localStorage`, tự động gắn Authorization header qua Axios interceptor, và chặn route phân quyền bằng `ProtectedRoute`.
+- **File chính thay đổi:** `web_dashboard/src/shared/types/auth.ts`, `web_dashboard/src/features/auth/api/authApi.ts`, `web_dashboard/src/features/auth/context/AuthContext.tsx`, `web_dashboard/src/features/auth/components/OtpLoginForm.tsx`, `web_dashboard/src/features/auth/components/StaffLoginForm.tsx`, `web_dashboard/src/features/auth/pages/LoginPage.tsx`, `web_dashboard/src/shared/components/ProtectedRoute.tsx`, `web_dashboard/src/app/AppRouter.tsx`, `web_dashboard/src/test/*`, `web_dashboard/vite.config.ts`, `web_dashboard/package.json`.
+- **Kiểm thử:** `npm run build` (`vite build`) thành công 100% (thời gian build: 560ms); `npm test` (`vitest run`) pass 2/2 test files (7/7 tests pass 100%).
+- **Review phát hiện & đã sửa:**
+  1. Cài đặt Vitest & Testing Library cho Web Dashboard để đảm bảo kiểm thử tự động toàn diện.
+  2. OTP Helper Badge chỉ hiển thị khi field `otp` thực sự có trong API response từ backend.
+  3. Bổ sung ghi chú bảo mật XSS trực tiếp trong code liên quan đến việc lưu JWT tại `localStorage`.
+- **Trạng thái:** ⏳ Chờ review (sẵn sàng commit/push sau khi duyệt)
+
 ## [2026-08-20] Backend — Triển khai Module Auth & Users (Đăng ký OTP, Staff Login, RBAC)
 - **Phạm vi:** `backend/`
 - **Yêu cầu:** Xây dựng module `auth` và `users` độc lập, xác thực OTP bệnh nhân, đăng nhập staff (bcrypt), phát hành JWT token (thời hạn 24h, fail-fast nếu thiếu JWT_SECRET), kiểm tra RBAC thực tế qua enum `Role`, tạo hồ sơ tạm Walk-in (`is_temp: true`) và quản lý `PatientProfile`.
