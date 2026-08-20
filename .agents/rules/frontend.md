@@ -18,6 +18,10 @@
 - Component UI Admin Panel tối ưu ngang (Tablet/PC) theo NFR 5.3 — vùng
   chạm nút thao tác tối thiểu 44×44px cho các trang dùng trên tablet
   (Bác sĩ, KTV, Dược sĩ, Lễ tân).
+- AppRouter.tsx chỉ khai báo route và import component — không viết JSX nội
+  dung feature trực tiếp trong router. Khi code feature thật, thay FeaturePlaceholder
+  bằng component import từ features/<ten>/pages/, không sửa router thành nơi chứa UI.
+
 
 ## Flutter Mobile App
 - Mỗi feature trong `lib/features/<ten>/` tự chứa `presentation/` (screen +

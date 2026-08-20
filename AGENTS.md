@@ -42,3 +42,6 @@ Field chi tiết từng entity: xem `.agents/rules/database.md`.
 5. Luôn viết test tối thiểu cho logic nghiệp vụ có nhánh rẽ (cảnh báo dị ứng,
    bóc tách hóa đơn, khóa slot, chính sách hoàn tiền).
 6. Khi không chắc một quyết định thiết kế, dừng lại và hỏi thay vì đoán.
+7. Sau khi hoàn thành và được duyệt 1 task có thay đổi file, cập nhật
+   `docs/CHANGELOG.md` theo đúng khung ở `.agents/rules/changelog.md`.
+
